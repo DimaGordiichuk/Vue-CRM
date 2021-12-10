@@ -1,12 +1,19 @@
 <template>
-    <div class="card" v-for="post in posts">
-        <div><strong>Назва</strong>{{ post.title }}</div>
-        <div><strong>Description</strong>{{ post.body }}</div>
+    <div>
+        <h5>List of posts</h5>
+        <post-item
+            v-for="post in posts"
+            :post="post"
+        >
+        </post-item>
     </div>
+
 </template>
 
 <script>
+import PostItem from "./PostItem";
 export default {
+    components: {PostItem},
     props: {
         posts: {
             type: Array,
