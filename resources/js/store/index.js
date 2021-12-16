@@ -1,11 +1,13 @@
 import {createStore} from "vuex";
-import {postModule} from './postModule'
+import {postModule} from './postModule';
+import {countCategories} from './countCategories';
 
 export default createStore( {
     state: {
         isAuth: false,
     },
     modules: {
-        post: postModule
+        post: postModule,
+        category: countCategories,
     }
 })

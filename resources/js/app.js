@@ -9,6 +9,7 @@ import components from './components/UI';
 import directives from "./directives";
 import 'materialize-css/dist/js/materialize.min'
 import store from "./store";
+import {Toaster} from "@meforma/vue-toaster";
 
 const app = createApp(App);
 
@@ -23,6 +24,7 @@ directives.forEach(directive => {
 app
     .use(router)
     .use(store)
+    .use(Toaster)
     .mount('#app')
 
 
