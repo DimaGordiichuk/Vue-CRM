@@ -2,43 +2,35 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-
-                <div class="alert alert-danger" role="alert" v-if="error !== null">
-                    {{ error }}
-                </div>
-
                 <div class="card card-default">
                     <div class="card-header">Login</div>
                     <div class="card-body">
-                        <form>
-                            <div class="form-group row">
-                                <label for="email" class="col-sm-4 col-form-label text-md-right">E-Mail Address</label>
-                                <div class="col-md-6">
+                        <form @submit.prevent="loginUser">
+                            <div class="row create-row">
+                                <div :class="['input-field col s6', errors.email ? 'invalid' : '']">
                                     <input
-                                        required autofocus autocomplete="off"
-                                        id="email"
-                                        type="email"
-                                        class="form-control"
-                                        :class="{ error: error }"
-                                        v-model="email"
-                                        >
+                                        type="text"
+                                        :class="['validate', errors.email ? 'invalid' : '']"
+                                        v-model="form.email"
+                                    >
+                                    <label>Введіть email</label>
+                                    <span v-if="errors.email" class="helper-text invalid">{{ errors.email[0] }}</span>
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
-                                <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control" v-model="password"
-                                           required autocomplete="off">
+                            <div class="row create-row">
+                                <div :class="['input-field col s6', errors.password ? 'invalid' : '']">
+                                    <input
+                                        type="password"
+                                        :class="['validate', errors.password ? 'invalid' : '']"
+                                        v-model="form.password"
+                                    >
+                                    <label>Введіть пароль</label>
+                                    <span v-if="errors.password" class="helper-text invalid">{{ errors.password[0] }}</span>
                                 </div>
                             </div>
-
                             <div class="form-group row mb-0">
-                                <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary" @click="handleSubmit">
-                                        Login
-                                    </button>
-                                </div>
+                                <button type="submit" class="btn btn-primary">Login</button>
                             </div>
                         </form>
                     </div>
@@ -49,43 +41,28 @@
 </template>
 
 <script>
+import { reactive } from 'vue'
+import useAuth from '../composables/auth'
+
 export default {
-    data() {
+    setup() {
+        const form = reactive({
+            'email': '',
+            'password': '',
+        })
+        const { login, getAuthenticated, getUser, errors } = useAuth()
+
+        const loginUser = async () => {
+            await login({...form});
+        }
+
         return {
-            email: "",
-            password: "",
-            error: null
+            loginUser,
+            form,
+            errors,
+            getAuthenticated,
+            getUser
         }
-    },
-    methods: {
-        handleSubmit(e) {
-            e.preventDefault()
-            if (this.password.length > 0) {
-                axios.get('/sanctum/csrf-cookie').then(response => {
-                    axios.post('/api/login', {
-                        email: this.email,
-                        password: this.password
-                    })
-                        .then(response => {
-                            console.log(response.data)
-                            if (response.data.success) {
-                                this.$router.go('/')
-                            } else {
-                                this.error = response.data.message
-                            }
-                        })
-                        .catch(function (error) {
-                            console.error(error);
-                        });
-                })
-            }
-        }
-    },
-    beforeRouteEnter(to, from, next) {
-        if (window.Laravel.isLoggedin) {
-            return next('home');
-        }
-        next();
     }
 }
 </script>

@@ -3,28 +3,28 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { createToaster } from "@meforma/vue-toaster";
 
-export default function useCategories()
+export default function useUsers()
 {
-    const categories = ref([])
-    const category = ref([])
+    const users = ref([])
+    const user = ref([])
     const router = useRouter()
     const errors = ref('')
     const toaster = createToaster();
 
-    const getCategories = async () => {
-        let response = await axios.get('/api/categories')
-        categories.value = response.data.data;
+    const getUsers = async () => {
+        let response = await axios.get('/api/users')
+        users.value = response.data.data;
     }
-    const getCategory = async (id) => {
-        let response = await axios.get('/api/categories/' + id)
-        category.value = response.data.data;
+    const getUser = async (id) => {
+        let response = await axios.get('/api/user/' + id)
+        user.value = response.data.data;
     }
 
-    const storeCategory = async (data) => {
+    const storeUser = async (data) => {
         errors.value = ''
         try {
-            const response = await axios.post('/api/categories', data)
-                categories.value.push(response.data.data);
+            const response = await axios.post('/api/users', data)
+                users.value.push(response.data.data);
                 toaster.success(response.data.message)
             // await router.push({name: 'categories.index'})
         } catch (e) {
@@ -38,10 +38,10 @@ export default function useCategories()
         }
     }
 
-    const updateCategory = async (id, cat) => {
+    const updateUser = async (id, cat) => {
         errors.value = ''
         try {
-            const response = await axios.put('/api/categories/' + id, cat);
+            const response = await axios.put('/api/users/' + id, cat);
             toaster.success(response.data.message)
 
         } catch (e) {
@@ -52,10 +52,10 @@ export default function useCategories()
 
     }
 
-    const destroyCategory = async (id) => {
+    const destroyUser = async (id) => {
         errors.value = ''
         try {
-            const response = await axios.delete('/api/categories/' + id)
+            const response = await axios.delete('/api/users/' + id)
             toaster.success(response.data.message)
 
         } catch (e) {
@@ -67,13 +67,13 @@ export default function useCategories()
     }
 
     return {
-        categories,
-        category,
+        users,
+        user,
         errors,
-        getCategories,
-        getCategory,
-        storeCategory,
-        updateCategory,
-        destroyCategory
+        getUsers,
+        getUser,
+        storeUser,
+        updateUser,
+        destroyUser
     }
 }

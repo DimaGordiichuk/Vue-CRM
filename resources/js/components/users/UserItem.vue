@@ -1,30 +1,26 @@
 <template>
-    <form class="table-row" @submit.prevent="changeCategory(category.id)">
+    <form class="table-row" @submit.prevent="changeUser(user.id)">
         <div :class="['input-field', errors ? 'invalid' : '']">
-            {{ category.id }}
+            {{ user.id }}
         </div>
         <div :class="['input-field', errors ? 'invalid' : '']">
             <input
                 type="text"
                 :class="['validate', errors ? 'invalid' : '']"
-                v-model="category.name"
+                v-model="user.name"
             >
         </div>
         <div :class="['input-field', errors ? 'invalid' : '']">
             <input
-                type="number"
+                type="text"
                 :class="['validate', errors ? 'invalid' : '']"
-                v-model="category.limit"
+                v-model="user.email"
             >
         </div>
         <div class="action">
             <button class="btn" type="submit">Update</button>
-<!--            <button type="button"-->
-<!--                    @click="deleteCategory(category.id)"-->
-<!--                    class="btn btn-danger">-->
-<!--                Delete</button> -->
             <button type="button"
-                    @click="$emit('remove', category.id)"
+                    @click="$emit('remove', user.id)"
                     class="btn btn-danger">
                 Delete</button>
         </div>
@@ -33,25 +29,25 @@
 
 <script>
 import { onMounted, reactive } from "vue";
-import useCategories from "../../composables/categories";
+import useUsers from "../../composables/users";
 
 export default {
     props: {
-        category: {
+        user: {
             type: Object,
             required: true,
         }
     },
     setup(props) {
-        const { errors, updateCategory } = useCategories()
+        const { errors, updateUser } = useUsers()
 
-        const changeCategory = async (id) => {
-            await updateCategory(id, props.category)
+        const changeUser = async (id) => {
+            await updateUser(id, props.user)
         }
 
         return {
             errors,
-            changeCategory
+            changeUser
         }
     }
 }

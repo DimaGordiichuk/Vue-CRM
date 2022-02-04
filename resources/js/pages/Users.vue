@@ -2,12 +2,12 @@
     <div class="section no-pad-bot">
         <div class="container">
             <br><br>
-            <h1 class="header center orange-text">Категорії</h1>
+            <h1 class="header center orange-text">Користувачі</h1>
             <div class="row center">
                 <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
             </div>
-            <h5>Добавити категорію</h5>
-            <form class="col s12" @submit.prevent="saveCategory">
+            <h5>Добавити користувача</h5>
+            <form class="col s12" @submit.prevent="saveEvent">
                 <div class="row">
                     <div :class="['input-field col s6', errors.name ? 'invalid' : '']">
                         <input
@@ -16,25 +16,25 @@
                             :class="['validate', errors.name ? 'invalid' : '']"
                             v-model="form.name"
                         >
-                        <label for="name">Назва категорії</label>
+                        <label for="name">Ім'я користувача</label>
                         <span v-if="errors.name" class="helper-text invalid">{{ errors.name[0] }}</span>
                     </div>
-                    <div :class="['input-field col s6', errors.limit ? 'invalid' : '']">
+                    <div :class="['input-field col s6', errors.email ? 'invalid' : '']">
                         <input
-                            id="limit"
-                            type="number"
-                            :class="['validate', errors.limit ? 'invalid' : '']"
-                            v-model="form.limit"
+                            id="email"
+                            type="text"
+                            :class="['validate', errors.email ? 'invalid' : '']"
+                            v-model="form.email"
                         >
-                        <label for="limit">Ліміт</label>
-                        <span v-if="errors.limit" class="helper-text invalid">{{ errors.limit[0] }}</span>
+                        <label for="email">Email</label>
+                        <span v-if="errors.email" class="helper-text invalid">{{ errors.email[0] }}</span>
                     </div>
                 </div>
                 <div class="row">
                     <button class="btn" type="submit">Зберегти</button>
                 </div>
             </form>
-            <div v-if="categories.length > 0" class="mt">
+            <div v-if="users.length > 0" class="mt">
                 <div class="min-w-full border divide-y divide-gray-200">
                     <div class="table-head">
                         <th class="px-6 py-3 bg-gray-50">
@@ -43,21 +43,21 @@
                         </th>
                         <th class="px-6 py-3 bg-gray-50">
                     <span
-                        class="text-xs font-medium tracking-wider leading-4 text-left text-gray-500 uppercase">Назва</span>
+                        class="text-xs font-medium tracking-wider leading-4 text-left text-gray-500 uppercase">Ім'я</span>
                         </th>
                         <th class="px-6 py-3 bg-gray-50">
                     <span
-                        class="text-xs font-medium tracking-wider leading-4 text-left text-gray-500 uppercase">Ліміт</span>
+                        class="text-xs font-medium tracking-wider leading-4 text-left text-gray-500 uppercase">Email</span>
                         </th>
                         <th class="px-6 py-3 bg-gray-50"></th>
                     </div>
-                   <category-list
-                       :categories="categories"
-                       @remove="removeCategory"
-                   ></category-list>
+                   <user-list
+                       :users="users"
+                       @remove="removeUser"
+                   ></user-list>
                 </div>
             </div>
-            <h5 v-else>Список категорій пустий!</h5>
+            <h5 v-else>Список користувачів пустий!</h5>
             <br><br>
 
         </div>
@@ -67,40 +67,41 @@
 
 <script>
 import {onMounted, reactive} from "vue";
-import useCategories from "../composables/categories";
-import CategoryList from "../components/categories/CategoryList";
+import useUsers from "../composables/users";
+import UserList from "../components/users/UserList";
+
 
 export default {
     components: {
-        CategoryList
+        UserList
     },
     setup() {
-        const { categories, getCategories, errors, storeCategory, destroyCategory } = useCategories()
+        const { users, getUsers, errors, storeUser, destroyUser } = useUsers()
 
-        onMounted(getCategories)
+        onMounted(getUsers)
 
         const form = reactive({
             'name': '',
-            'limit': '',
+            'email': '',
         })
 
-        const saveCategory = async () => {
-            await storeCategory({...form});
+        const saveUser = async () => {
+            await storeUser({...form});
             form.name = '';
-            form.limit = '';
+            form.email = '';
         }
 
-        const removeCategory = async (id) => {
-            await destroyCategory(id);
-            await getCategories();
+        const removeUser = async (id) => {
+            await destroyUser(id);
+            await getUsers();
         }
 
         return {
             form,
             errors,
-            categories,
-            removeCategory,
-            saveCategory
+            users,
+            removeUser,
+            saveUser
         }
     }
 }

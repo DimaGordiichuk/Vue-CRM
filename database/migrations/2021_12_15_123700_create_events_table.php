@@ -17,14 +17,10 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug')->nullable();
-            $table->string('country')->nullable();
-            $table->string('place')->nullable();
-            $table->string('street')->nullable();
             $table->string('address')->nullable();
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
-            $table->integer('coauthor')->nullable();
-            $table->unsignedBigInteger('category_id');
+            $table->json('coauthor')->nullable();
             $table->text('description');
             $table->boolean('is_privacy');
             $table->boolean('confirm_user');

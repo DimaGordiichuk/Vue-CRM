@@ -6,12 +6,29 @@
                 <li><router-link to="/categories">Categories</router-link></li>
                 <li><router-link to="/posts">Posts</router-link></li>
                 <li><router-link to="/events">Events</router-link></li>
+
+                <template v-if="getAuthenticated">
+                    <li><a @click="logout">Logout</a></li>
+                </template>
+
+                <template v-else>
+                    <li><router-link to="/login" >login</router-link></li>
+                    <li><router-link to="/register" >Register</router-link></li>
+                </template>
             </ul>
 
             <ul id="nav-mobile" class="sidenav">
                 <li><router-link to="/categories">Categories</router-link></li>
                 <li><router-link to="/posts">Posts</router-link></li>
                 <li><router-link to="/events">Events</router-link></li>
+                <template v-if="getAuthenticated">
+                    <li><a class="nav-item nav-link" style="cursor: pointer;" @click="logout">Logout</a></li>
+                </template>
+
+                <template v-else>
+                    <li><router-link to="/login" >login</router-link></li>
+                    <li><router-link to="/register" >Register</router-link></li>
+                </template>
             </ul>
             <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         </div>
@@ -19,36 +36,19 @@
 </template>
 
 <script>
+
+import useAuth from '../composables/auth'
+
 export default {
-    // data() {
-    //     return {
-    //         isLoggedIn: false,
-    //     }
-    // },
-    // created() {
-    //     if (window.Laravel.isLoggedin) {
-    //         this.isLoggedIn = true
-    //     }
-    // },
-    // methods: {
-    //     logout(e) {
-    //         console.log('ss')
-    //         e.preventDefault()
-    //         this.$axios.get('/sanctum/csrf-cookie').then(response => {
-    //             this.$axios.post('/api/logout')
-    //                 .then(response => {
-    //                     if (response.data.success) {
-    //                         window.location.href = "/"
-    //                     } else {
-    //                         console.log(response)
-    //                     }
-    //                 })
-    //                 .catch(function (error) {
-    //                     console.error(error);
-    //                 });
-    //         })
-    //     }
-    // },
+    setup() {
+        const { logout, getAuthenticated, getUser } = useAuth()
+
+        return {
+            getAuthenticated,
+            getUser,
+            logout
+        }
+    },
 }
 </script>
 

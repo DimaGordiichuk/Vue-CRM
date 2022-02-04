@@ -14,16 +14,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+Route::post('login', [\App\Http\Controllers\Api\Auth\LoginController::class, 'login']);
+Route::post('register', [\App\Http\Controllers\Api\Auth\RegisterController::class, 'register']);
+Route::post('logout', [\App\Http\Controllers\Api\Auth\LoginController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::post('login', [\App\Http\Controllers\Api\UserController::class, 'login']);
-Route::post('register', [\App\Http\Controllers\Api\UserController::class, 'register']);
-Route::post('logout', [\App\Http\Controllers\Api\UserController::class, 'logout'])->middleware('auth:sanctum');
+Route::group(['middleware' => 'auth:sanctum'], function () {
 
-Route::apiResource('categories', \App\Http\Controllers\Api\CategoryController::class)
-    ->except('show', 'create', 'edit');
+    Route::get('user', function (Request $request) {
+       return $request->user();
+    });
 
-Route::apiResource('posts', \App\Http\Controllers\Api\PostController::class);
-Route::apiResource('users', \App\Http\Controllers\Api\UserController::class);
+    Route::apiResource('categories', \App\Http\Controllers\Api\CategoryController::class)
+        ->except('show', 'create', 'edit');
+
+    Route::apiResource('users', \App\Http\Controllers\Api\UserController::class)
+        ->except('show', 'create', 'edit');
+
+    Route::apiResource('events', \App\Http\Controllers\Api\EventController::class);
+
+    Route::apiResource('posts', \App\Http\Controllers\Api\PostController::class);
+});

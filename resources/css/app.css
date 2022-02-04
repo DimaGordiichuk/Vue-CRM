@@ -9083,3 +9083,9 @@ input[type=range]::-ms-thumb {
         margin-top: 1.2rem;
     }
 }
+.main-photo {
+    width: 500px;
+    height: auto;
+    max-height: 350px;
+    object-fit: cover;
+}
